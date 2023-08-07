@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Victor+Mono:wght@300;700&display=swap');
+
+body {
+	font-family: 'Victor Mono', monospace;
+	color: rgba(39, 40, 41, 1);
+}
+
+.wrapper {
+	padding: 50px 0;
+}
+
+.form-control {
+	border-radius: 0;
+	border-left: none;
+	border-top: none;
+	border-right: none;
+	box-shadow: none !important;
+	outline: none !important;
+	border-color: rgba(39, 40, 41, .4);
+	font-size: 24px;
+	padding-left: 0;
+}
+
+.custom-control-label::before {
+	border-color: rgba(39, 40, 41, .4) !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+.form-control:focus {
+	border-color: rgba(39, 40, 41, .7);
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 700;
+}
+
+
+
+.set-name, .set-row {
+	display: none;
+}
+
+.form-for-row .form-control {
+	margin-right: 10px;
+}
+
+.form-group {
+	position: relative;
+}
+
+.form-group label.movable {
+	font-size: 24px;
+	font-weight: 700;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	transition: .1s ease-in;
+}
+
+.name {
+	font-size: 24px;
+	font-weight: 700;
+}
