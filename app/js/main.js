@@ -3,7 +3,7 @@ $(document).ready(function () {
 
 	// Переменные для вашего GitHub репозитория
 	const username = 'cash-register';	 // Замените на ваше имя пользователя
-	const repository = 'cash-register'; // Замените на ваш репозиторий
+	const repository = 'cash-register.github.io'; // Замените на ваш репозиторий
 	const branch = 'main';				// Замените на нужную ветку
 	const filename = 'jsonData.json'; // Путь к вашему JSON файлу
 
