@@ -12,29 +12,42 @@ $(document).ready(function () {
 
 	const apiUrl = `https://api.github.com/repos/${username}/${repository}/contents/${filename}?ref=${branch}`;
 
-	const token = decodeBase64('Z2hwXzdjV2dnS1g1WDVHM3QyeWh0T2FCSTNZUmVYTVNmcTFKdU03OQ==');
-	console.log(token);
+	const token = 'Z2hwXzdjV2dnS1g1WDVHM3QyeWh0T2FCSTNZUmVYTVNmcTFKdU03OQ==';
 
-    // Чтение данных из JSON файла и вывод в консоль
-    fetch(apiUrl, {
-        headers: {
-            'Authorization': `token ${token}`
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const content = atob(data.content); // Декодируем base64
-            const jsonData = JSON.parse(content);
-            console.log('Данные из JSON файла:', jsonData);
-        })
-        .catch(error => {
-            console.error('Ошибка при получении JSON:', error);
-        });
+    function updateFileContent(newData) {
+        return getFileContent()
+            .then(({ content, sha }) => {
+                // Подготовьте новое содержимое
+                const updatedContent = JSON.stringify(newData, null, 2);
+                const base64Content = btoa(updatedContent);
+
+                // URL GitHub API для обновления файла
+                const updateUrl = `https://api.github.com/repos/${username}/${repository}/contents/${filename}`;
+
+                return fetch(updateUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${decodeBase64(token)}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Updating JSON data',
+                        content: base64Content,
+                        sha: sha,
+                        branch: branch
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Файл успешно обновлён:', data);
+                });
+            });
+    }
 
 	$('.btn').on('click', function () {
 
@@ -52,6 +65,11 @@ $(document).ready(function () {
 			"number": number,
 			"switches": switches
 		}
+
+        updateFileContent(jsonData)
+            .catch(error => {
+                console.error('Ошибка при обновлении JSON:', error);
+            });
 
 	})
 })
