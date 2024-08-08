@@ -14,6 +14,26 @@ $(document).ready(function () {
 
 	const token = decodeBase64('Z2hwXzdjV2dnS1g1WDVHM3QyeWh0T2FCSTNZUmVYTVNmcTFKdU03OQ==');
 
+    // Чтение данных из JSON файла и вывод в консоль
+    fetch(apiUrl, {
+        headers: {
+            'Authorization': `token ${token}`
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const content = atob(data.content); // Декодируем base64
+            const jsonData = JSON.parse(content);
+            console.log('Данные из JSON файла:', jsonData);
+        })
+        .catch(error => {
+            console.error('Ошибка при получении JSON:', error);
+        });
 
 	$('.btn').on('click', function () {
 
