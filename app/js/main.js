@@ -13,6 +13,7 @@ $(document).ready(function () {
 	const apiUrl = `https://api.github.com/repos/${username}/${repository}/contents/${filename}?ref=${branch}`;
 
 	const token = decodeBase64('Z2hwXzdjV2dnS1g1WDVHM3QyeWh0T2FCSTNZUmVYTVNmcTFKdU03OQ==');
+	console.log(token);
 
     // Чтение данных из JSON файла и вывод в консоль
     fetch(apiUrl, {
