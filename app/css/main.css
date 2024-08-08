@@ -1,0 +1,20 @@
+body {
+	background: #343a40;
+	display: none;
+}
+
+.custom-control-label::before {
+	border-color: #dc3545;
+	background-color: #dc3545;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+	border-color: #28a745;
+	background-color: #28a745;
+}
+
+.custom-switch .custom-control-label::after {
+	background-color: #ffffff !important;
+}

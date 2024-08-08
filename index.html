@@ -3,56 +3,87 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-	<link rel="stylesheet" href="www/css/main.css">
-	<title>Cash Register</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="app/css/main.css">
+	<title>IDs Data</title>
 </head>
 <body>
-	
-	<div class="wrapper">
-		<div class="container">
-			<div class="set-name">
-				<form class="form-for-name">
-					<div class="form-group">
-						<label class="movable" for="name">Set name</label>
-						<input type="name" class="form-control" id="name">
-					</div>
-					<button class="btn btn-outline-primary" id="setName">Next</button>
-				</form>
-			</div>
-			<div class="set-row">
-				<div class="name"></div>
-				<table class="table table-hover my-3" id="dataTable">
-					<caption><strong>Total amount:</strong><span></span></caption>
-					<tbody></tbody>
-				</table>
-				<form class="form-for-row">
-					<div class="form-inline">
-						<div class="form-group">
-							<input type="date" class="form-control" id="date">
+	<div class="wrapper container">
+		<table class="table table-hover table-responsive-md table-dark text-center">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">ИИН</th>
+					<th scope="col">1+1</th>
+					<th scope="col">5+D</th>
+					<th scope="col">D+2</th>
+					<th scope="col">D+4</th>
+					<th scope="col">1+1 [sticks]</th>
+					<th scope="col">3+3 [sticks]</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Динамические элементы -->
+				<tr>
+					<td>1</td>
+					<td>030904500667</td>
+					<td><span class="badge badge-success">Доступно</span></td>
+					<td><span class="badge badge-success">Доступно</span></td>
+					<td><span class="badge badge-success">Доступно</span></td>
+					<td><span class="badge badge-success">Доступно</span></td>
+					<td><span class="badge badge-success">Доступно</span></td>
+					<td><span class="badge badge-danger">Недоступно</span></td>
+				</tr>x
+				<!-- Всегда -->
+				<tr>
+					<td></td>
+					<td><input type="text" id="number" class="form-control form-control-sm"></td>
+					<td>
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="1p1" checked>
+							<label class="custom-control-label" for="1p1"></label>
 						</div>
-						<div class="form-group">
-							<label class="movable" for="amount">Amount</label>
-							<input type="number" class="form-control" id="amount" data-toggle="tooltip" data-placement="bottom" title="Fill out this field!">
+					</td>
+					<td>
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="5pd" checked>
+							<label class="custom-control-label" for="5pd"></label>
 						</div>
-						<div class="form-group">
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="isHoliday">
-								<label class="custom-control-label" for="isHoliday">Holiday?</label>
-							</div>
+					</td>
+					<td>
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="dp2" checked>
+							<label class="custom-control-label" for="dp2"></label>
 						</div>
-					</div>
-					<button type="button" class="btn btn-outline-primary mt-3" id="setRow">Next</button>
-					<button type="button" class="btn btn-outline-warning mt-3" id="clearData">Clear</button>
-				</form>
-			</div>
-		</div>
+					</td>
+					<td>
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="dp4" checked>
+							<label class="custom-control-label" for="dp4"></label>
+						</div>
+					</td>
+					<td>
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="1p1s" checked>
+							<label class="custom-control-label" for="1p1s"></label>
+						</div>
+					</td>
+					<td>
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="3p3s" checked>
+							<label class="custom-control-label" for="3p3s"></label>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<button class="btn btn-outline-success">Добавить</button>
 	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
-	<script src="www/js/main.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="app/js/main.js"></script>
 
 </body>
 </html>
