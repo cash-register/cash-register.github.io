@@ -1,29 +1,19 @@
+function decodeBase64(encodedText) {
+    return decodeURIComponent(escape(atob(encodedText)));
+}
+
 $(document).ready(function () {
 	$('body').css('display', 'block');
 
-	// Переменные для вашего GitHub репозитория
-	const username = 'cash-register';	 // Замените на ваше имя пользователя
-	const repository = 'cash-register.github.io'; // Замените на ваш репозиторий
-	const branch = 'main';				// Замените на нужную ветку
-	const filename = 'jsonData.json'; // Путь к вашему JSON файлу
+	const username = 'cash-register';
+	const repository = 'cash-register.github.io';
+	const branch = 'main';
+	const filename = 'jsonData.json';
 
-	// Сформируйте URL сырого JSON файла из вашего GitHub репозитория
-	const jsonUrl = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/${filename}`;
+	const apiUrl = `https://api.github.com/repos/${username}/${repository}/contents/${filename}?ref=${branch}`;
 
-	// Чтение данных из JSON файла и вывод в консоль
-	fetch(jsonUrl)
-		.then(response => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok ' + response.statusText);
-			}
-			return response.json();
-		})
-		.then(data => {
-			console.log('Данные из JSON файла:', data);
-		})
-		.catch(error => {
-			console.error('Ошибка при получении JSON:', error);
-		});
+	const token = decodeBase64('Z2hwXzdjV2dnS1g1WDVHM3QyeWh0T2FCSTNZUmVYTVNmcTFKdU03OQ==');
+
 
 	$('.btn').on('click', function () {
 
