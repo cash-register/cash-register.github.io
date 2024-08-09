@@ -7,22 +7,6 @@ body {
 	display: none;
 }
 
-.custom-control-label::before {
-	border-color: #dc3545;
-	background-color: #dc3545;
-	outline: none !important;
-	box-shadow: none !important;
-}
-
-.custom-control-input:checked~.custom-control-label::before {
-	border-color: #28a745;
-	background-color: #28a745;
-}
-
-.custom-switch .custom-control-label::after {
-	background-color: #ffffff !important;
-}
-
 input {
 	background: rgba(0, 0, 0, .25) !important;
 	border-color: transparent !important;
@@ -37,7 +21,7 @@ input:focus {
 
 button {
 	font-weight: bold !important;
-	border-width: 3px !important
+	border-width: 3px !important;
 }
 
 button:focus {
@@ -46,8 +30,13 @@ button:focus {
 
 table {
 	background: rgba(0, 0, 0, .2) !important;
+	transition: .3s ease;
 }
 
 caption {
 	font-weight: bold;
+}
+
+.sticky-table {
+	background: rgba(0, 0, 0, .7) !important;
 }
