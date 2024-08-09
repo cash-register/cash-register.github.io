@@ -161,7 +161,7 @@ $(document).ready(function () {
 			</tr>`;
 			$('tbody').append(row);
    totalResult += item.result;
-   $('table').prepend(`<caption>Общая сумма:${totalResult}</caption>`);
+   $('table caption').text(`Общая сумма: ${totalResult}`);
 		});
 
 	}
