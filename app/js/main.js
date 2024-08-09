@@ -51,48 +51,19 @@ $(document).ready(function () {
 
 		// Условия для расчета результата
 		if (deviceCount == 0) {
-   if (smokeCount < 6) {
-     result = 800 * multiplier;
-   }
-   else if (smokeCount >= 6) {
-     result = 960 * multiplier;
-   }
+			result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
 		}
-  else if (deviceCount == 1) {
-   if (smokeCount < 6) {
-     result = 800 * multiplier + 1000;
-   }
-   else if (smokeCount >= 6) {
-     result = 960 * multiplier + 1000;
-   }
+		else if (deviceCount == 1) {
+			result = ((smokeCount < 6) ? 800 * multiplier : 960 * multiplier) + 1000;
 		}
-  else if (deviceCount == 2) {
-			if (smokeCount < 6) {
-				result = 1550 * multiplier + 2000;
-			} else if (smokeCount >= 6) {
-				result = 1860 * multiplier + 2000;
-			}
+		else if (deviceCount == 2) {
+			result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
 		}
-  else if (deviceCount == 3) {
-			if (smokeCount < 6) {
-				result = 1860 * multiplier + 3000;
-			} else if (smokeCount >= 6) {
-				result = 2240 * multiplier + 3000;
-			}
+		else if (deviceCount == 3) {
+			result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + 3000;
 		}
-  else if (deviceCount == 4) {
-			if (smokeCount < 6) {
-				result = 1860 * multiplier + 4000;
-			} else if (smokeCount >= 6) {
-				result = 2240 * multiplier + 4000;
-			}
-		}
-  else if (deviceCount == 5) {
-			if (smokeCount < 6) {
-				result = 1860 * multiplier + 5000;
-			} else if (smokeCount >= 6) {
-				result = 2240 * multiplier + 5000;
-			}
+		else if (deviceCount >= 4) {
+			result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + deviceCount * 1000;
 		}
 
 		return result;
@@ -148,20 +119,29 @@ $(document).ready(function () {
 		// Очистка таблицы
 		$('.empty').empty();
 
-  let totalResult = 0;
+		let totalResult = 0;
+		let totalDevices = 0;
+		let totalSmokes = 0;
 
 		// Добавление строк в таблицу
 		dataList.forEach((item, index) => {
-			const row = `<tr>
-		<td>${index + 1}</td>
-		<td><span class="font-weight-bold">${normalFormatDate(item.date)}</span></td>
-		<td><span class="badge badge-success">${item.deviceCount}</span></td>
-		<td><span class="badge badge-success">${item.smokeCount}</span></td>
-		<td><span class="badge badge-primary">${item.result}</span></td>
-			</tr>`;
+				const row = `<tr>
+			<td>${index + 1}</td>
+			<td><span class="font-weight-bold">${normalFormatDate(item.date)}</span></td>
+			<td><span class="badge badge-success">${item.deviceCount} шт</span></td>
+			<td><span class="badge badge-success">${item.smokeCount} шт</span></td>
+			<td><span class="badge badge-primary">${item.result} тг</span></td>
+				</tr>`;
+
 			$('tbody').append(row);
-   totalResult += item.result;
-   $('table caption').text(`Общая сумма: ${totalResult}`);
+
+			totalResult += item.result;
+			totalDevices += item.deviceCount;
+			totalSmokes += item.smokeCount;
+
+			$('table .caption-1').text(`Общая сумма: ${totalResult} тг`);
+			$('table .caption-2').text(`Девайсов за месяц: ${totalDevices} шт`);
+			$('table .caption-3').text(`Сигарет за месяц: ${totalSmokes} шт`);
 		});
 
 	}
