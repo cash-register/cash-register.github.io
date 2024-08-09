@@ -1,3 +1,7 @@
+* {
+	border-radius: 0 !important;
+}
+
 body {
 	background: #343a40;
 	display: none;
@@ -17,4 +21,33 @@ body {
 
 .custom-switch .custom-control-label::after {
 	background-color: #ffffff !important;
+}
+
+input {
+	background: rgba(0, 0, 0, .25) !important;
+	border-color: transparent !important;
+	color: var(--light) !important;
+	height: 35px !important;
+	font-weight: bold !important;
+}
+
+input:focus {
+	box-shadow: 0 0 0 .2rem rgba(255, 255, 255, .25) !important;
+}
+
+button {
+	font-weight: bold !important;
+	border-width: 3px !important
+}
+
+button:focus {
+	box-shadow: 0 0 0 .2rem rgba(255, 255, 255, .25) !important;
+}
+
+table {
+	background: rgba(0, 0, 0, .2) !important;
+}
+
+caption {
+	font-weight: bold;
 }
