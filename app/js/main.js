@@ -50,19 +50,48 @@ $(document).ready(function () {
 		const multiplier = 4;
 
 		// Условия для расчета результата
-		if ((deviceCount == 0 || deviceCount == 1) && smokeCount < 6) {
-			result = 800 * multiplier;
-		} else if (deviceCount == 2) {
+		if (deviceCount == 0) {
+   if (smokeCount < 6) {
+     result = 800 * multiplier;
+   }
+   else if (smokeCount >= 6) {
+     result = 960 * multiplier;
+   }
+		}
+  else if (deviceCount == 1) {
+   if (smokeCount < 6) {
+     result = 800 * multiplier + 1000;
+   }
+   else if (smokeCount >= 6) {
+     result = 960 * multiplier + 1000;
+   }
+		}
+  else if (deviceCount == 2) {
 			if (smokeCount < 6) {
-				result = 1550 * multiplier;
+				result = 1550 * multiplier + 2000;
 			} else if (smokeCount >= 6) {
-				result = 1550 * multiplier + 310 * multiplier;
+				result = 1860 * multiplier + 2000;
 			}
-		} else if (deviceCount >= 3) {
+		}
+  else if (deviceCount == 3) {
 			if (smokeCount < 6) {
-				result = 1860 * multiplier;
+				result = 1860 * multiplier + 3000;
 			} else if (smokeCount >= 6) {
-				result = 1860 * multiplier + 380 * multiplier;
+				result = 2240 * multiplier + 3000;
+			}
+		}
+  else if (deviceCount == 4) {
+			if (smokeCount < 6) {
+				result = 1860 * multiplier + 4000;
+			} else if (smokeCount >= 6) {
+				result = 2240 * multiplier + 4000;
+			}
+		}
+  else if (deviceCount == 5) {
+			if (smokeCount < 6) {
+				result = 1860 * multiplier + 5000;
+			} else if (smokeCount >= 6) {
+				result = 2240 * multiplier + 5000;
 			}
 		}
 
