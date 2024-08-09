@@ -148,6 +148,8 @@ $(document).ready(function () {
 		// Очистка таблицы
 		$('.empty').empty();
 
+  let totalResult = 0;
+
 		// Добавление строк в таблицу
 		dataList.forEach((item, index) => {
 			const row = `<tr>
@@ -158,6 +160,8 @@ $(document).ready(function () {
 		<td><span class="badge badge-primary">${item.result}</span></td>
 			</tr>`;
 			$('tbody').append(row);
+   totalResult += item.result;
+   $('table').prepend(`<caption>Общая сумма:${totalResult}</caption>`);
 		});
 
 	}
