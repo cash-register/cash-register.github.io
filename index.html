@@ -5,17 +5,36 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="app/css/main.css">
-	<title>IDs Data</title>
+	<title>SalNotes</title>
 </head>
 <body>
 	<div class="wrapper container">
-		<table class="table table-responsive-md table-dark text-center mt-3">
-		<caption class="ml-2 caption-1">Общая сумма: 0 тг</caption>
-		<caption class="ml-2 caption-2">Девайсов за месяц: 0 шт</caption>
-		<caption class="ml-2 caption-3">Сигарет за месяц: 0 шт</caption>
+
+		<table class="table table-responsive-md table-dark text-center mt-3 sticky-top" id="create-data-table">
+			<tbody>
+				<tr>
+					<td>
+						<input type="date" id="date" class="form-control form-control-sm">
+					</td>
+					<td>
+						<input type="text" id="device-count" class="form-control form-control-sm" value="0">
+					</td>
+					<td>
+						<input type="text" id="smoke-count" class="form-control form-control-sm" value="0">
+					</td>
+					<td>
+						<button class="btn btn-outline-primary btn-sm" id="addRow">Добавить</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table class="table table-responsive-md table-dark text-center mt-3" id="data-table">
+			<caption class="ml-2 caption-1">Общая сумма: 0 тг</caption>
+			<caption class="ml-2 caption-2">Девайсов за месяц: 0 шт</caption>
+			<caption class="ml-2 caption-3">Сигарет за месяц: 0 шт</caption>
 			<thead>
 				<tr>
-					<th scope="col">#</th>
 					<th scope="col">Дата</th>
 					<th scope="col">Продано девайсов</th>
 					<th scope="col">Продано сигарет</th>
@@ -23,15 +42,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				<div class="empty"></div>
-				<!-- Всегда -->
-				<tr>
-					<td></td>
-					<td><input type="date" id="date" class="form-control form-control-sm"></td>
-					<td><input type="text" id="device-count" class="form-control form-control-sm" value="0"></td>
-					<td><input type="text" id="smoke-count" class="form-control form-control-sm" value="0"></td>
-					<td><button class="btn btn-outline-primary btn-sm" id="addRow">Добавить</button></td>
-				</tr>
 			</tbody>
 		</table>
 		<button class="btn btn-outline-warning btn-sm" id="clearData">Очистить</button>
