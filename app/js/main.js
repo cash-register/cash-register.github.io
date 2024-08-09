@@ -1,97 +1,137 @@
-function decodeBase64(encodedText) {
-    return decodeURIComponent(escape(atob(encodedText)));
-}
-
 $(document).ready(function () {
+
 	$('body').css('display', 'block');
 
-	const username = 'cash-register';
-	const repository = 'cash-register.github.io';
-	const branch = 'main';
-	const filename = 'jsonData.json';
+	// Утсновка даты
 
-	const apiUrl = `https://api.github.com/repos/${username}/${repository}/contents/${filename}?ref=${branch}`;
+	function formatDate(date) {
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, '0');
+		const day = String(date.getDate()).padStart(2, '0');
+		return `${year}-${month}-${day}`;
+	}
 
-	const token = 'Z2hwXzdjV2dnS1g1WDVHM3QyeWh0T2FCSTNZUmVYTVNmcTFKdU03OQ==';
+	function normalFormatDate(dateString) {
+		const date = new Date(dateString);
+		const day = String(date.getDate()).padStart(2, '0');
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы от 0 до 11
+		const year = date.getFullYear();
+		return `${day}.${month}.${year}`;
+	}
 
-    // Функция для получения содержимого файла
-    function getFileContent() {
-        return fetch(apiUrl, {
-            headers: {
-                'Authorization': `token ${decodeBase64(token)}`
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const content = atob(data.content); // Декодируем base64
-            return {
-                content: JSON.parse(content),
-                sha: data.sha
-            };
-        });
-    }
+	const today = new Date();
 
-    function updateFileContent(newData) {
-        return getFileContent()
-            .then(({ content, sha }) => {
-                // Подготовьте новое содержимое
-                const updatedContent = JSON.stringify(newData, null, 2);
-                const base64Content = btoa(updatedContent);
+	$('#date').val(formatDate(today));
 
-                // URL GitHub API для обновления файла
-                const updateUrl = `https://api.github.com/repos/${username}/${repository}/contents/${filename}`;
+	// Установка значений по умолчанию
 
-                return fetch(updateUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${decodeBase64(token)}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: 'Updating JSON data',
-                        content: base64Content,
-                        sha: sha,
-                        branch: branch
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Файл успешно обновлён:', data);
-                });
-            });
-    }
+	function setupInputField(selector, defaultValue) {
+		$(selector).on('focus', function() {
+			if ($(this).val() === defaultValue) {
+		$(this).val('');
+			}
+		}).on('blur', function() {
+			if ($(this).val() === '') {
+		$(this).val(defaultValue);
+			}
+		});
+	}
 
-	$('.btn').on('click', function () {
+	// Установка полей ввода с дефолтными значениями
+	setupInputField('#device-count', '0');
+	setupInputField('#smoke-count', '0');
 
-		const number = $('#number').val();
-		const switches = {
-			"1p1": $('#1p1').is(':checked'),
-			"5pd": $('#5pd').is(':checked'),
-			"dp2": $('#dp2').is(':checked'),
-			"dp4": $('#dp4').is(':checked'),
-			"1p1s": $('#1p1s').is(':checked'),
-			"3p3s": $('#3p3s').is(':checked')
+	// Подсчёт результата
+
+	function calculateResult(deviceCount, smokeCount) {
+		let result = 0;
+
+		// Умножитель для расчета результата
+		const multiplier = 4;
+
+		// Условия для расчета результата
+		if ((deviceCount == 0 || deviceCount == 1) && smokeCount < 6) {
+			result = 800 * multiplier;
+		} else if (deviceCount == 2) {
+			if (smokeCount < 6) {
+				result = 1550 * multiplier;
+			} else if (smokeCount >= 6) {
+				result = 1550 * multiplier + 310 * multiplier;
+			}
+		} else if (deviceCount >= 3) {
+			if (smokeCount < 6) {
+				result = 1860 * multiplier;
+			} else if (smokeCount >= 6) {
+				result = 1860 * multiplier + 380 * multiplier;
+			}
 		}
 
-		const jsonData = {
-			"number": number,
-			"switches": switches
-		}
+		return result;
+	}
 
-        updateFileContent(jsonData)
-            .catch(error => {
-                console.error('Ошибка при обновлении JSON:', error);
-            });
+	// Сохранение данных
 
+	$('#addRow').on('click', function() {
+		// Получение значений из полей ввода
+		const date = $('#date').val();
+		const deviceCount = $('#device-count').val();
+		const smokeCount = $('#smoke-count').val();
+		const result = calculateResult(deviceCount, smokeCount);
+
+		// Создание объекта с данными
+		const data = {
+			date: date,
+			deviceCount: parseInt(deviceCount),
+			smokeCount: parseInt(smokeCount),
+			result: parseInt(result)
+		};
+
+		// Получение существующих данных из localStorage
+		let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
+
+		// Добавление нового объекта в массив данных
+		dataList.push(data);
+
+		// Сохранение обновленного массива в localStorage
+		localStorage.setItem('dataList', JSON.stringify(dataList));
+
+		// Очистка полей ввода
+		$('#date').val(formatDate(today));
+		$('#device-count').val('0');
+		$('#smoke-count').val('0');
+
+		window.location.reload()
+	});
+
+	// Очистка данных
+
+	$('#clearData').on('click', function () {
+		localStorage.clear();
+		window.location.reload();
 	})
+
+	// Вывод данных
+
+	function renderTable() {
+		// Получение данных из localStorage
+		let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
+
+		// Очистка таблицы
+		$('.empty').empty();
+
+		// Добавление строк в таблицу
+		dataList.forEach((item, index) => {
+			const row = `<tr>
+		<td>${index + 1}</td>
+		<td><span class="font-weight-bold">${normalFormatDate(item.date)}</span></td>
+		<td><span class="badge badge-success">${item.deviceCount}</span></td>
+		<td><span class="badge badge-success">${item.smokeCount}</span></td>
+		<td><span class="badge badge-primary">${item.result}</span></td>
+			</tr>`;
+			$('tbody').append(row);
+		});
+
+	}
+
+	renderTable();
 })
