@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 	$('body').css('display', 'block');
 
-	// Утсновка даты
+	// Установка даты
 
 	function formatDate(date) {
 		const year = date.getFullYear();
@@ -46,10 +46,8 @@ $(document).ready(function () {
 	function calculateResult(deviceCount, smokeCount) {
 		let result = 0;
 
-		// Умножитель для расчета результата
 		const multiplier = 4;
 
-		// Условия для расчета результата
 		if (deviceCount == 0) {
 			result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
 		}
@@ -69,16 +67,18 @@ $(document).ready(function () {
 		return result;
 	}
 
-	// Сохранение данных
+	function syncScroll(source, target) {
+		target.scrollLeft(source.scrollLeft());
+	}
+
+	// Создание и сохранение данных
 
 	$('#addRow').on('click', function() {
-		// Получение значений из полей ввода
 		const date = $('#date').val();
 		const deviceCount = $('#device-count').val();
 		const smokeCount = $('#smoke-count').val();
 		const result = calculateResult(deviceCount, smokeCount);
 
-		// Создание объекта с данными
 		const data = {
 			date: date,
 			deviceCount: parseInt(deviceCount),
@@ -86,16 +86,12 @@ $(document).ready(function () {
 			result: parseInt(result)
 		};
 
-		// Получение существующих данных из localStorage
 		let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
 
-		// Добавление нового объекта в массив данных
 		dataList.push(data);
 
-		// Сохранение обновленного массива в localStorage
 		localStorage.setItem('dataList', JSON.stringify(dataList));
 
-		// Очистка полей ввода
 		$('#date').val(formatDate(today));
 		$('#device-count').val('0');
 		$('#smoke-count').val('0');
@@ -117,7 +113,7 @@ $(document).ready(function () {
 		let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
 
 		// Очистка таблицы
-		$('.empty').empty();
+		// $('#data-table tbody .data').empty();
 
 		let totalResult = 0;
 		let totalDevices = 0;
@@ -126,25 +122,48 @@ $(document).ready(function () {
 		// Добавление строк в таблицу
 		dataList.forEach((item, index) => {
 				const row = `<tr>
-			<td>${index + 1}</td>
-			<td><span class="font-weight-bold">${normalFormatDate(item.date)}</span></td>
+			<td><span class="badge badge-primary">${normalFormatDate(item.date)}</span></td>
 			<td><span class="badge badge-success">${item.deviceCount} шт</span></td>
 			<td><span class="badge badge-success">${item.smokeCount} шт</span></td>
 			<td><span class="badge badge-primary">${item.result} тг</span></td>
 				</tr>`;
 
-			$('tbody').append(row);
+			$('#data-table tbody').append(row);
 
 			totalResult += item.result;
 			totalDevices += item.deviceCount;
 			totalSmokes += item.smokeCount;
 
-			$('table .caption-1').text(`Общая сумма: ${totalResult} тг`);
-			$('table .caption-2').text(`Девайсов за месяц: ${totalDevices} шт`);
-			$('table .caption-3').text(`Сигарет за месяц: ${totalSmokes} шт`);
+			$('#data-table .caption-1').text(`Общая сумма: ${totalResult} тг`);
+			$('#data-table .caption-2').text(`Девайсов за месяц: ${totalDevices} шт`);
+			$('#data-table .caption-3').text(`Сигарет за месяц: ${totalSmokes} шт`);
 		});
 
 	}
 
 	renderTable();
+
+	// Выделение sticky элемента
+
+	$(window).on('scroll', function() {
+		var stickyElement = $('.sticky-top');
+		var isSticky = stickyElement.offset().top <= $(window).scrollTop();
+
+		if (isSticky) {
+		$('#create-data-table').addClass('sticky-table');
+		} else {
+		$('#create-data-table').removeClass('sticky-table');
+		}
+	});
+
+	// Синхронизация скролла таблиц
+
+	$('#create-data-table').on('scroll', function() {
+		syncScroll($('#create-data-table'), $('#data-table'));
+	});
+
+	$('#data-table').on('scroll', function() {
+		syncScroll($('#data-table'), $('#create-data-table'));
+	});
+
 })
