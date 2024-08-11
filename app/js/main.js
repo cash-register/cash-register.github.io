@@ -1,8 +1,15 @@
 $(document).ready(function () {
 
+	console.log(localStorage.getItem('isSuperSalary'))
+let isSuperSalary = localStorage.getItem('isSuperSalary') === null ? false : localStorage.getItem('isSuperSalary') === 'true';
+
+if (isSuperSalary) {
+    $('#is-super-salary').addClass('active');
+}
+
 	$('body').css('display', 'block');
 
-	// Утсновка даты
+	// Установка даты
 
 	function formatDate(date) {
 		const year = date.getFullYear();
@@ -28,11 +35,11 @@ $(document).ready(function () {
 	function setupInputField(selector, defaultValue) {
 		$(selector).on('focus', function() {
 			if ($(this).val() === defaultValue) {
-		$(this).val('');
+				$(this).val('');
 			}
 		}).on('blur', function() {
 			if ($(this).val() === '') {
-		$(this).val(defaultValue);
+				$(this).val(defaultValue);
 			}
 		});
 	}
@@ -46,39 +53,58 @@ $(document).ready(function () {
 	function calculateResult(deviceCount, smokeCount) {
 		let result = 0;
 
-		// Умножитель для расчета результата
 		const multiplier = 4;
 
-		// Условия для расчета результата
-		if ((deviceCount == 0 || deviceCount == 1) && smokeCount < 6) {
-			result = 800 * multiplier;
-		} else if (deviceCount == 2) {
-			if (smokeCount < 6) {
-				result = 1550 * multiplier;
-			} else if (smokeCount >= 6) {
-				result = 1550 * multiplier + 310 * multiplier;
+		if (!isSuperSalary) {
+			if (deviceCount == 0) {
+				result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
 			}
-		} else if (deviceCount >= 3) {
-			if (smokeCount < 6) {
-				result = 1860 * multiplier;
-			} else if (smokeCount >= 6) {
-				result = 1860 * multiplier + 380 * multiplier;
+			else if (deviceCount == 1) {
+				result = ((smokeCount < 6) ? 800 * multiplier : 960 * multiplier) + 1000;
+			}
+			else if (deviceCount == 2) {
+				result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
+			}
+			else if (deviceCount == 3) {
+				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + 3000;
+			}
+			else if (deviceCount >= 4) {
+				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + deviceCount * 1000;
+			}
+		}
+		else {
+			if (deviceCount == 0) {
+				result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
+			}
+			else if (deviceCount == 1) {
+				result = ((smokeCount < 6) ? 1240 * multiplier : 1490 * multiplier) + 1000;
+			}
+			else if (deviceCount == 2) {
+				result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
+			}
+			else if (deviceCount == 3) {
+				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + 3000;
+			}
+			else if (deviceCount >= 4) {
+				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + deviceCount * 1000;
 			}
 		}
 
 		return result;
 	}
 
-	// Сохранение данных
+	function syncScroll(source, target) {
+		target.scrollLeft(source.scrollLeft());
+	}
+
+	// Создание и сохранение данных
 
 	$('#addRow').on('click', function() {
-		// Получение значений из полей ввода
 		const date = $('#date').val();
 		const deviceCount = $('#device-count').val();
 		const smokeCount = $('#smoke-count').val();
 		const result = calculateResult(deviceCount, smokeCount);
 
-		// Создание объекта с данными
 		const data = {
 			date: date,
 			deviceCount: parseInt(deviceCount),
@@ -86,16 +112,12 @@ $(document).ready(function () {
 			result: parseInt(result)
 		};
 
-		// Получение существующих данных из localStorage
 		let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
 
-		// Добавление нового объекта в массив данных
 		dataList.push(data);
 
-		// Сохранение обновленного массива в localStorage
 		localStorage.setItem('dataList', JSON.stringify(dataList));
 
-		// Очистка полей ввода
 		$('#date').val(formatDate(today));
 		$('#device-count').val('0');
 		$('#smoke-count').val('0');
@@ -117,21 +139,77 @@ $(document).ready(function () {
 		let dataList = JSON.parse(localStorage.getItem('dataList')) || [];
 
 		// Очистка таблицы
-		$('.empty').empty();
+		// $('#data-table tbody .data').empty();
+
+		let totalResult = 0;
+		let totalDevices = 0;
+		let totalSmokes = 0;
 
 		// Добавление строк в таблицу
 		dataList.forEach((item, index) => {
-			const row = `<tr>
-		<td>${index + 1}</td>
-		<td><span class="font-weight-bold">${normalFormatDate(item.date)}</span></td>
-		<td><span class="badge badge-success">${item.deviceCount}</span></td>
-		<td><span class="badge badge-success">${item.smokeCount}</span></td>
-		<td><span class="badge badge-primary">${item.result}</span></td>
-			</tr>`;
-			$('tbody').append(row);
+				const row = `<tr>
+			<td><span class="badge badge-primary">${normalFormatDate(item.date)}</span></td>
+			<td><span class="badge badge-success">${item.deviceCount} шт</span></td>
+			<td><span class="badge badge-success">${item.smokeCount} шт</span></td>
+			<td><span class="badge badge-primary">${item.result} тг</span></td>
+				</tr>`;
+
+			$('#data-table tbody').append(row);
+
+			totalResult += item.result;
+			totalDevices += item.deviceCount;
+			totalSmokes += item.smokeCount;
+
+			$('#data-table .caption-1').text(`Общая сумма: ${totalResult} тг`);
+			$('#data-table .caption-2').text(`Девайсов за месяц: ${totalDevices} шт`);
+			$('#data-table .caption-3').text(`Сигарет за месяц: ${totalSmokes} шт`);
 		});
 
 	}
 
 	renderTable();
+
+	// Выделение sticky элемента
+
+	$(window).on('scroll', function() {
+		var stickyElement = $('.sticky-top');
+		var isSticky = stickyElement.offset().top <= $(window).scrollTop();
+
+		if (isSticky) {
+			$('#create-data-table').parent('.table-wrapper').addClass('sticky-table');
+			$('#is-super-salary').addClass('stickied');
+		}
+		else {
+			$('#create-data-table').parent('.table-wrapper').removeClass('sticky-table');
+			$('#is-super-salary').removeClass('stickied');
+		}
+	});
+
+	// Синхронизация скролла таблиц
+
+	$('#create-data-table').on('scroll', function() {
+		syncScroll($('#create-data-table'), $('#data-table'));
+	});
+
+	$('#data-table').on('scroll', function() {
+		syncScroll($('#data-table'), $('#create-data-table'));
+	});
+
+	// isSuperSalary size
+	$('#is-super-salary').height(`${$('#create-data-table').outerHeight()}px`);
+	$('#is-super-salary').css('line-height', `${$('#create-data-table').height()}px`);
+
+	$('#is-super-salary').on('click', function () {
+		if (!isSuperSalary) {
+			$('#is-super-salary').addClass('active');
+			isSuperSalary = true;
+			localStorage.setItem('isSuperSalary', true);
+		}
+		else {
+			$('#is-super-salary').removeClass('active');
+			isSuperSalary = false;
+			localStorage.setItem('isSuperSalary', false);
+		}
+	})
+
 })
