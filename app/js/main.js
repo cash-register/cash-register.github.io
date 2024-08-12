@@ -1,12 +1,5 @@
 $(document).ready(function () {
 
-	console.log(localStorage.getItem('isSuperSalary'))
-let isSuperSalary = localStorage.getItem('isSuperSalary') === null ? false : localStorage.getItem('isSuperSalary') === 'true';
-
-if (isSuperSalary) {
-    $('#is-super-salary').addClass('active');
-}
-
 	$('body').css('display', 'block');
 
 	// Установка даты
@@ -55,39 +48,20 @@ if (isSuperSalary) {
 
 		const multiplier = 4;
 
-		if (!isSuperSalary) {
-			if (deviceCount == 0) {
-				result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
-			}
-			else if (deviceCount == 1) {
-				result = ((smokeCount < 6) ? 800 * multiplier : 960 * multiplier) + 1000;
-			}
-			else if (deviceCount == 2) {
-				result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
-			}
-			else if (deviceCount == 3) {
-				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + 3000;
-			}
-			else if (deviceCount >= 4) {
-				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + deviceCount * 1000;
-			}
+		if (deviceCount == 0) {
+			result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
 		}
-		else {
-			if (deviceCount == 0) {
-				result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
-			}
-			else if (deviceCount == 1) {
-				result = ((smokeCount < 6) ? 1240 * multiplier : 1490 * multiplier) + 1000;
-			}
-			else if (deviceCount == 2) {
-				result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
-			}
-			else if (deviceCount == 3) {
-				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + 3000;
-			}
-			else if (deviceCount >= 4) {
-				result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + deviceCount * 1000;
-			}
+		else if (deviceCount == 1) {
+			result = ((smokeCount < 6) ? 800 * multiplier : 960 * multiplier) + 1000;
+		}
+		else if (deviceCount == 2) {
+			result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
+		}
+		else if (deviceCount == 3) {
+			result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + 3000;
+		}
+		else if (deviceCount >= 4) {
+			result = ((smokeCount < 6) ? 1860 * multiplier : 2240 * multiplier) + deviceCount * 1000;
 		}
 
 		return result;
@@ -148,10 +122,11 @@ if (isSuperSalary) {
 		// Добавление строк в таблицу
 		dataList.forEach((item, index) => {
 				const row = `<tr>
-			<td><span class="badge badge-primary">${normalFormatDate(item.date)}</span></td>
-			<td><span class="badge badge-success">${item.deviceCount} шт</span></td>
-			<td><span class="badge badge-success">${item.smokeCount} шт</span></td>
-			<td><span class="badge badge-primary">${item.result} тг</span></td>
+					<td><span class="badge badge-primary">${normalFormatDate(item.date)}</span></td>
+					<td><span class="badge badge-success">${item.deviceCount} шт</span></td>
+					<td><span class="badge badge-success">${item.smokeCount} шт</span></td>
+					<td><span class="badge badge-primary">${item.result} тг</span></td>
+					<td class="for-delete-btn"><button class="btn btn-outline-danger btn-sm deleteRow" data-index="${index}"><i class="fa fa-times" aria-hidden="true"></i></button></td>
 				</tr>`;
 
 			$('#data-table tbody').append(row);
@@ -177,11 +152,9 @@ if (isSuperSalary) {
 
 		if (isSticky) {
 			$('#create-data-table').parent('.table-wrapper').addClass('sticky-table');
-			$('#is-super-salary').addClass('stickied');
 		}
 		else {
 			$('#create-data-table').parent('.table-wrapper').removeClass('sticky-table');
-			$('#is-super-salary').removeClass('stickied');
 		}
 	});
 
@@ -195,21 +168,28 @@ if (isSuperSalary) {
 		syncScroll($('#data-table'), $('#create-data-table'));
 	});
 
-	// isSuperSalary size
-	$('#is-super-salary').height(`${$('#create-data-table').outerHeight()}px`);
-	$('#is-super-salary').css('line-height', `${$('#create-data-table').height()}px`);
+	// Удаление строки
 
-	$('#is-super-salary').on('click', function () {
-		if (!isSuperSalary) {
-			$('#is-super-salary').addClass('active');
-			isSuperSalary = true;
-			localStorage.setItem('isSuperSalary', true);
+	$('.deleteRow').on('click', function () {
+		const index = $(this).data('index');
+
+		if (index !== undefined) {
+			let data = JSON.parse(localStorage.getItem('dataList'));
+			data.splice(index, 1);
+			console.log(data);
+			localStorage.setItem('dataList', JSON.stringify(data));
+			window.location.reload();
 		}
-		else {
-			$('#is-super-salary').removeClass('active');
-			isSuperSalary = false;
-			localStorage.setItem('isSuperSalary', false);
-		}
+	})
+
+	// Сдвигание строки таблицы
+
+	$('#data-table tr').on('touchstart', function () {
+
+		let width = $(this).find('td.for-delete-btn').outerWidth();
+
+		$('#data-table tr').css('transform', 'translateX(0px)')
+		$(this).css('transform', `translateX(-${width}px)`)
 	})
 
 })
