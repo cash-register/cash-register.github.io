@@ -184,7 +184,7 @@ $(document).ready(function () {
 
 	// Сдвигание строки таблицы
 
-	$('#data-table tr').on('touchstart', function () {
+	$('#data-table tr').on('touchend', function () {
 
 		let width = $(this).find('td.for-delete-btn').outerWidth();
 
