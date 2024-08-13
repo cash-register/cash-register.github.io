@@ -184,12 +184,12 @@ $(document).ready(function () {
 
 	// Сдвигание строки таблицы
 
-	$('#data-table tr').on('touchend', function () {
+	$('#data-table tr:not(:first)').on('touchend', function () {
 
-		let width = $(this).find('td.for-delete-btn').outerWidth();
+		let width = $(this).find('td.for-delete-btn')[0].getBoundingClientRect().width;
 
-		$('#data-table tr').css('transform', 'translateX(0px)')
-		$(this).css('transform', `translateX(-${width}px)`)
+		$('#data-table tr').css('transform', 'translateX(0px)');
+		$(this).css('transform', `translateX(-${width}px)`);
 	})
 
 })
