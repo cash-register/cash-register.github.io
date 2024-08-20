@@ -52,7 +52,7 @@ $(document).ready(function () {
 			result = (smokeCount < 6) ? 800 * multiplier : 960 * multiplier;
 		}
 		else if (deviceCount == 1) {
-			result = ((smokeCount < 6) ? 800 * multiplier : 960 * multiplier) + 1000;
+			result = ((smokeCount < 6) ? 1240 * multiplier : 1490 * multiplier) + 1000;
 		}
 		else if (deviceCount == 2) {
 			result = ((smokeCount < 6) ? 1550 * multiplier : 1860 * multiplier) + 2000;
