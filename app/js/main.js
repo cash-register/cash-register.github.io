@@ -135,13 +135,15 @@ $(document).ready(function () {
 			totalResult += item.result;
 			totalDevices += item.deviceCount;
 			totalSmokes += item.smokeCount;
-   resultTotal = totalResult - (totalResult * 0.10) - (totalResult * 0.10 * 0.12);
+   let tenPer = totalResult * 0.10;
+   let twelvePer = (totalResult - tenPer) * 0.12;
+   resultTotal = totalResult - tenPer - twelvePer;
 
 			$('#data-table .caption-1').text(`Общая сумма: ${totalResult} тг`);
 			$('#data-table .caption-2').text(`Девайсов за месяц: ${totalDevices} шт`);
 			$('#data-table .caption-3').text(`Сигарет за месяц: ${totalSmokes} шт`);
 		});
-   $('#data-table .caption-4').html(`Заработная плата:<br>${resultTotal} тг`);
+   $('#data-table .caption-4').html(`ЗАРАБОТНАЯ ПЛАТА:<br>${resultTotal} тг`);
 
 	}
 
