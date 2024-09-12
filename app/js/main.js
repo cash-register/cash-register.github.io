@@ -118,6 +118,7 @@ $(document).ready(function () {
 		let totalResult = 0;
 		let totalDevices = 0;
 		let totalSmokes = 0;
+  let resultTotal = 0;
 
 		// Добавление строк в таблицу
 		dataList.forEach((item, index) => {
@@ -134,11 +135,13 @@ $(document).ready(function () {
 			totalResult += item.result;
 			totalDevices += item.deviceCount;
 			totalSmokes += item.smokeCount;
+   resultTotal = totalResult - (totalResult * 0.10) - (totalResult * 0.10 * 0.12);
 
 			$('#data-table .caption-1').text(`Общая сумма: ${totalResult} тг`);
 			$('#data-table .caption-2').text(`Девайсов за месяц: ${totalDevices} шт`);
 			$('#data-table .caption-3').text(`Сигарет за месяц: ${totalSmokes} шт`);
 		});
+   $('#data-table .caption-4').html(`Заработная плата:<br>${resultTotal} тг`);
 
 	}
 
